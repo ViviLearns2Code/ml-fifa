@@ -1,7 +1,7 @@
 '''
     File name: NNClassifier.py
     Author: vivilearnstocode
-    Last modified: 06/25/2018
+    Last modified: 07/07/2018
     Python version: 3.6
 '''
 
@@ -47,6 +47,8 @@ class NNClassifier(BaseEstimator,ClassifierMixin):
         for t in range(self.iter):
             scores = self.clf(X_train)
             scores_np = scores.data.numpy()
+            norm = scores_np.max(axis=1,keepdims=True)
+            scores_np = scores_np-norm
             proba = np.exp(scores_np)/np.sum(np.exp(scores_np),axis=1,keepdims=True)
             y_pred = np.argmax(proba,axis=1)
             loss = criterion(scores, y_train)
