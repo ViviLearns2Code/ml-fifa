@@ -1,7 +1,7 @@
 '''
     File name: NBPyTorch.py
     Author: vivilearnstocode
-    Last modified: 06/10/2018
+    Last modified: 07/07/2018
     Python version: 3.6
 '''
 import torch
@@ -49,29 +49,19 @@ class PoNet(nn.Module):
         return x
 
 class NBNLLLoss(nn.Module):
-    def __init__(self,eps=1e-5,verbose=False):
+    def __init__(self,eps=1e-5):
         super(NBNLLLoss, self).__init__()
         self.eps = eps
-        self.verbose = verbose
 
     def forward(self,mu,alpha,y):
         eps = self.eps
-        theta = 1/(alpha+eps)
-        s1 = -torch.lgamma(y+theta+eps)
-        s2 = torch.lgamma(theta+eps)
+        r = 1/(alpha+eps)
+        s1 = -torch.lgamma(y+r+eps)
+        s2 = torch.lgamma(r+eps)
         s3 = torch.lgamma(y+1)
-        s4 = -theta*torch.log(theta+eps)
+        s4 = -r*torch.log(r+eps)
         s5 = -y*torch.log(mu+eps)
-        s6 = (theta+y)*torch.log(theta+mu+eps)
-        if self.verbose == True:
-            print("mu",mu,mu.shape)
-            print("theta",theta,theta.shape)
-            print("s1",s1,s1.shape)
-            print("s2",s2,s2.shape)
-            print("s3",s3,s3.shape)
-            print("s4",s4,s4.shape)
-            print("s5",s5,s5.shape)
-            print("s6",s6,s6.shape)
+        s6 = (r+y)*torch.log(r+mu+eps)
         NLL = torch.mean(s1+s2+s3+s4+s5+s6)
         if NLL < 0:
             raise Exception("NLL cannot be negative for PMF")
