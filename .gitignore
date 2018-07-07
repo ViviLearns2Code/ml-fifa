@@ -1,0 +1,7 @@
+crawler/output
+crawler/transfermarkt/transfermarkt/__pycache__
+crawler/transfermarkt/transfermarkt/spiders/__pycache__
+crawler/.ipynb_checkpoints
+.ipynb_checkpoints
+.vscode
+__pycache__
